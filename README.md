@@ -155,7 +155,7 @@ SMTP_PASSWORD=your-app-password
 ALERT_EMAIL_TO=recipient@example.com
 ```
 If not configured, `--alert` is silently skipped — scans still run and print normally.
-```
+
 ## Project structure
 
 ```
@@ -176,6 +176,7 @@ azure-guardian/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
+
 ```
 ## Roadmap
 
