@@ -108,12 +108,33 @@ Unit tests cover the rule-evaluation logic in isolation (no live Azure connectio
 pytest tests/ -v
 ```
 
-Current coverage: 7 tests validating safe vs. risky rule combinations (SSH/RDP open to `*`, restricted IPs, outbound rules, deny rules, wildcard port ranges).
+Example output:
 
+================================================= test session starts =================================================
+collected 13 items
+
+tests/test_cost_scanner.py::test_vm_running_over_threshold_is_flagged PASSED [ 7%]
+tests/test_cost_scanner.py::test_vm_running_under_threshold_is_safe PASSED [ 15%]
+tests/test_cost_scanner.py::test_deallocated_vm_is_ignored PASSED [ 23%]
+tests/test_cost_scanner.py::test_missing_time_created_is_safely_ignored PASSED [ 30%]
+tests/test_cost_scanner.py::test_orphan_disk_is_flagged PASSED [ 38%]
+tests/test_cost_scanner.py::test_attached_disk_is_safe PASSED [ 46%]
+tests/test_nsg_scanner.py::test_ssh_open_to_all_is_flagged PASSED [ 53%]
+tests/test_nsg_scanner.py::test_rdp_open_to_all_is_flagged PASSED [ 61%]
+tests/test_nsg_scanner.py::test_ssh_restricted_to_specific_ip_is_safe PASSED [ 69%]
+tests/test_nsg_scanner.py::test_outbound_rule_is_ignored PASSED [ 76%]
+tests/test_nsg_scanner.py::test_deny_rule_is_ignored PASSED [ 84%]
+tests/test_nsg_scanner.py::test_http_port_is_not_flagged PASSED [ 92%]
+tests/test_nsg_scanner.py::test_wildcard_port_range_flags_ssh PASSED [100%]
+
+================================================= 13 passed in 0.38s ==================================================
+```
+
+Current coverage: 13 tests across both scanners — NSG rule detection (7 tests: SSH/RDP open to `*`, restricted IPs, outbound rules, deny rules, wildcard port ranges) and cost monitoring (6 tests: VM runtime thresholds, deallocated VMs, orphaned disks).
 ## Roadmap
 
 - [x] Unit tests (`pytest`) for rule detection logic — 7 tests covering safe/risky rule combinations
-- [ ] Cost-monitoring module: detect long-running VMs and orphaned (unattached) disks
+- [x] Cost-monitoring module: detect long-running VMs and orphaned (unattached) disks
 - [ ] Alerting: send findings via email or Slack/Discord webhook
 - [ ] CLI interface (`azure-guardian scan --nsg`, `azure-guardian scan --costs`)
 - [ ] Scheduled scanning (cron / GitHub Actions on a timer)

@@ -5,7 +5,6 @@ from azure.mgmt.network import NetworkManagementClient
 
 load_dotenv()
 
-# Ports considérés comme sensibles s'ils sont ouverts à tout Internet
 DANGEROUS_PORTS = {
     "22": "SSH",
     "3389": "RDP",
@@ -27,31 +26,49 @@ def get_network_client():
     return NetworkManagementClient(credential, subscription_id)
 
 
+def evaluate_rule(nsg_name, resource_group, rule):
+    """
+    Pure logic function: takes a single rule's data and returns
+    a finding dict if risky, or None if safe.
+    No Azure API calls happen here — this is what we unit test.
+    """
+    if rule.direction != "Inbound" or rule.access != "Allow":
+        return None
+
+    source = rule.source_address_prefix
+    if source not in RISKY_SOURCE_PREFIXES:
+        return None
+
+    port_range = rule.destination_port_range or ""
+    for port, service_name in DANGEROUS_PORTS.items():
+        if port in port_range or port_range == "*":
+            return {
+                "nsg_name": nsg_name,
+                "resource_group": resource_group,
+                "rule_name": rule.name,
+                "port": port,
+                "service": service_name,
+                "source": source,
+                "severity": "HIGH",
+            }
+
+    return None
+
+
 def scan_nsgs():
+    """
+    Fetches real NSGs from Azure and evaluates each rule.
+    This function does the API calls; evaluate_rule() does the logic.
+    """
     client = get_network_client()
     findings = []
 
     for nsg in client.network_security_groups.list_all():
+        resource_group = nsg.id.split("/")[4]
         for rule in nsg.security_rules or []:
-            if rule.direction != "Inbound" or rule.access != "Allow":
-                continue
-
-            source = rule.source_address_prefix
-            if source not in RISKY_SOURCE_PREFIXES:
-                continue
-
-            port_range = rule.destination_port_range or ""
-            for port, service_name in DANGEROUS_PORTS.items():
-                if port in port_range or port_range == "*":
-                    findings.append({
-                        "nsg_name": nsg.name,
-                        "resource_group": nsg.id.split("/")[4],
-                        "rule_name": rule.name,
-                        "port": port,
-                        "service": service_name,
-                        "source": source,
-                        "severity": "HIGH",
-                    })
+            finding = evaluate_rule(nsg.name, resource_group, rule)
+            if finding:
+                findings.append(finding)
 
     return findings
 
