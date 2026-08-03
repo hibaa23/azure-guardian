@@ -82,8 +82,6 @@ pip install -r requirements.txt
 
 ## Usage
 
-## Usage
-
 After installing the package (`pip install -e .`), use the `azure-guardian` command:
 
 ```bash
@@ -95,6 +93,9 @@ azure-guardian scan --costs
 
 # Run all scans
 azure-guardian scan --all
+
+# Run all scans and send an email alert if issues are found
+azure-guardian scan --all --alert
 ```
 
 Alternatively, run modules directly without installing the package:
@@ -143,9 +144,6 @@ tests/test_nsg_scanner.py::test_wildcard_port_range_flags_ssh PASSED            
 
 ================================================= 18 passed in 0.37s ==================================================
 ```
-# Run all scans and send an email alert if issues are found
-azure-guardian scan --all --alert
-
 ## Email Alerting (optional)
 
 To enable email alerts, add these variables to your `.env` file:
@@ -157,9 +155,31 @@ SMTP_PASSWORD=your-app-password
 ALERT_EMAIL_TO=recipient@example.com
 ```
 If not configured, `--alert` is silently skipped — scans still run and print normally.
+```
+## Project structure
+
+```
+azure-guardian/
+├── azure_guardian/
+│   ├── __init__.py
+│   ├── nsg_scanner.py
+│   ├── cost_scanner.py
+│   ├── alerting.py
+│   └── cli.py
+├── tests/
+│   ├── __init__.py
+│   ├── test_nsg_scanner.py
+│   ├── test_cost_scanner.py
+│   ├── test_cli.py
+│   └── test_alerting.py
+├── pyproject.toml
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
 ## Roadmap
 
-- [x] Unit tests (`pytest`) for rule detection logic — 7 tests covering safe/risky rule combinations
+- [x] Unit tests (`pytest`) for rule detection logic — 18 tests covering safe/risky rule combinations
 - [x] Cost-monitoring module: detect long-running VMs and orphaned (unattached) disks
 - [x] Alerting: send findings via email or Slack/Discord webhook
 - [x] CLI interface (`azure-guardian scan --nsg`, `azure-guardian scan --costs`)
