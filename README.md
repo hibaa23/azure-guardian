@@ -178,13 +178,19 @@ azure-guardian/
 └── README.md
 
 ```
+## Scheduled Scanning (CI/CD)
+
+A GitHub Actions workflow (`.github/workflows/scheduled-scan.yml`) runs the full scan daily and sends an email alert if issues are found. It can also be triggered manually from the Actions tab.
+
+Required GitHub secrets: `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `ALERT_EMAIL_TO`.
+
 ## Roadmap
 
 - [x] Unit tests (`pytest`) for rule detection logic — 18 tests across all modules
 - [x] Cost-monitoring module: detect long-running VMs and orphaned (unattached) disks
 - [x] Alerting: send findings via email or Slack/Discord webhook
 - [x] CLI interface (`azure-guardian scan --nsg`, `azure-guardian scan --costs`)
-- [ ] Scheduled scanning (cron / GitHub Actions on a timer)
+- [x] Scheduled scanning (cron / GitHub Actions on a timer)
 
 ## Author
 
