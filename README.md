@@ -180,7 +180,7 @@ azure-guardian/
 ```
 ## Roadmap
 
-- [x] Unit tests (`pytest`) for rule detection logic — 18 tests covering safe/risky rule combinations
+- [x] Unit tests (`pytest`) for rule detection logic — 18 tests across all modules
 - [x] Cost-monitoring module: detect long-running VMs and orphaned (unattached) disks
 - [x] Alerting: send findings via email or Slack/Discord webhook
 - [x] CLI interface (`azure-guardian scan --nsg`, `azure-guardian scan --costs`)
