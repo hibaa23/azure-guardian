@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "azure-guardian"
+version = "0.1.0"
+description = "Security and cost monitoring tool for Azure subscriptions"
+requires-python = ">=3.10"
+dependencies = [
+    "azure-identity",
+    "azure-mgmt-network",
+    "azure-mgmt-compute",
+    "python-dotenv",
+    "click",
+]
+
+[project.scripts]
+azure-guardian = "azure_guardian.cli:cli"
+
+[tool.setuptools.packages.find]
+include = ["azure_guardian*"]

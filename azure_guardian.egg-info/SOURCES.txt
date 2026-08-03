@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+azure_guardian/__init__.py
+azure_guardian/cli.py
+azure_guardian/cost_scanner.py
+azure_guardian/nsg_scanner.py
+azure_guardian.egg-info/PKG-INFO
+azure_guardian.egg-info/SOURCES.txt
+azure_guardian.egg-info/dependency_links.txt
+azure_guardian.egg-info/entry_points.txt
+azure_guardian.egg-info/requires.txt
+azure_guardian.egg-info/top_level.txt
+tests/test_cost_scanner.py
+tests/test_nsg_scanner.py

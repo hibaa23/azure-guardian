@@ -82,22 +82,25 @@ pip install -r requirements.txt
 
 ## Usage
 
+## Usage
+
+After installing the package (`pip install -e .`), use the `azure-guardian` command:
+
 ```bash
-python azure_guardian/nsg_scanner.py
+# Scan NSGs only
+azure-guardian scan --nsg
+
+# Scan for cost issues only
+azure-guardian scan --costs
+
+# Run all scans
+azure-guardian scan --all
 ```
 
-## Project structure
-```
-azure-guardian/
-├── azure_guardian/
-│ ├── init.py
-│ └── nsg_scanner.py # NSG rule scanner (current feature)
-├── tests/
-│ ├── init.py
-│ └── test_nsg_scanner.py # Unit tests for rule detection logic
-├── requirements.txt
-├── .gitignore # Excludes venv/, .env, pycache
-└── README.md
+Alternatively, run modules directly without installing the package:
+
+```bash
+python -m azure_guardian.cli scan --all
 
 ```
 ## Testing
@@ -111,23 +114,30 @@ pytest tests/ -v
 Example output:
 
 ================================================= test session starts =================================================
-collected 13 items
+platform win32 -- Python 3.14.6, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\hibab\OneDrive\Documents\azure-guardian\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\hibab\OneDrive\Documents\azure-guardian
+configfile: pyproject.toml
+plugins: mock-3.15.1
+collected 15 items
 
-tests/test_cost_scanner.py::test_vm_running_over_threshold_is_flagged PASSED [ 7%]
-tests/test_cost_scanner.py::test_vm_running_under_threshold_is_safe PASSED [ 15%]
-tests/test_cost_scanner.py::test_deallocated_vm_is_ignored PASSED [ 23%]
-tests/test_cost_scanner.py::test_missing_time_created_is_safely_ignored PASSED [ 30%]
-tests/test_cost_scanner.py::test_orphan_disk_is_flagged PASSED [ 38%]
-tests/test_cost_scanner.py::test_attached_disk_is_safe PASSED [ 46%]
-tests/test_nsg_scanner.py::test_ssh_open_to_all_is_flagged PASSED [ 53%]
-tests/test_nsg_scanner.py::test_rdp_open_to_all_is_flagged PASSED [ 61%]
-tests/test_nsg_scanner.py::test_ssh_restricted_to_specific_ip_is_safe PASSED [ 69%]
-tests/test_nsg_scanner.py::test_outbound_rule_is_ignored PASSED [ 76%]
-tests/test_nsg_scanner.py::test_deny_rule_is_ignored PASSED [ 84%]
-tests/test_nsg_scanner.py::test_http_port_is_not_flagged PASSED [ 92%]
-tests/test_nsg_scanner.py::test_wildcard_port_range_flags_ssh PASSED [100%]
+tests/test_cli.py::test_scan_without_options_shows_warning PASSED                                                [  6%]
+tests/test_cli.py::test_scan_help_lists_options PASSED                                                           [ 13%]
+tests/test_cost_scanner.py::test_vm_running_over_threshold_is_flagged PASSED                                     [ 20%]
+tests/test_cost_scanner.py::test_vm_running_under_threshold_is_safe PASSED                                       [ 26%]
+tests/test_cost_scanner.py::test_deallocated_vm_is_ignored PASSED                                                [ 33%]
+tests/test_cost_scanner.py::test_missing_time_created_is_safely_ignored PASSED                                   [ 40%]
+tests/test_cost_scanner.py::test_orphan_disk_is_flagged PASSED                                                   [ 46%]
+tests/test_cost_scanner.py::test_attached_disk_is_safe PASSED                                                    [ 53%]
+tests/test_nsg_scanner.py::test_ssh_open_to_all_is_flagged PASSED                                                [ 60%]
+tests/test_nsg_scanner.py::test_rdp_open_to_all_is_flagged PASSED                                                [ 66%]
+tests/test_nsg_scanner.py::test_ssh_restricted_to_specific_ip_is_safe PASSED                                     [ 73%]
+tests/test_nsg_scanner.py::test_outbound_rule_is_ignored PASSED                                                  [ 80%]
+tests/test_nsg_scanner.py::test_deny_rule_is_ignored PASSED                                                      [ 86%]
+tests/test_nsg_scanner.py::test_http_port_is_not_flagged PASSED                                                  [ 93%]
+tests/test_nsg_scanner.py::test_wildcard_port_range_flags_ssh PASSED                                             [100%]
 
-================================================= 13 passed in 0.38s ==================================================
+================================================= 15 passed in 0.34s ==================================================
 ```
 
 Current coverage: 13 tests across both scanners — NSG rule detection (7 tests: SSH/RDP open to `*`, restricted IPs, outbound rules, deny rules, wildcard port ranges) and cost monitoring (6 tests: VM runtime thresholds, deallocated VMs, orphaned disks).
@@ -136,7 +146,7 @@ Current coverage: 13 tests across both scanners — NSG rule detection (7 tests:
 - [x] Unit tests (`pytest`) for rule detection logic — 7 tests covering safe/risky rule combinations
 - [x] Cost-monitoring module: detect long-running VMs and orphaned (unattached) disks
 - [ ] Alerting: send findings via email or Slack/Discord webhook
-- [ ] CLI interface (`azure-guardian scan --nsg`, `azure-guardian scan --costs`)
+- [x] CLI interface (`azure-guardian scan --nsg`, `azure-guardian scan --costs`)
 - [ ] Scheduled scanning (cron / GitHub Actions on a timer)
 
 ## Author

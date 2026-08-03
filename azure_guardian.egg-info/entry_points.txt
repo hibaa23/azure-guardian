@@ -1,0 +1,2 @@
+[console_scripts]
+azure-guardian = azure_guardian.cli:cli

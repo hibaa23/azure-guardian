@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: azure-guardian
+Version: 0.1.0
+Summary: Security and cost monitoring tool for Azure subscriptions
+Requires-Python: >=3.10
+Requires-Dist: azure-identity
+Requires-Dist: azure-mgmt-network
+Requires-Dist: azure-mgmt-compute
+Requires-Dist: python-dotenv
+Requires-Dist: click
