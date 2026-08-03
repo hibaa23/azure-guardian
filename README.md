@@ -188,7 +188,7 @@ Required GitHub secrets: `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`, `AZURE_TENANT
 
 - [x] Unit tests (`pytest`) for rule detection logic — 18 tests across all modules
 - [x] Cost-monitoring module: detect long-running VMs and orphaned (unattached) disks
-- [x] Alerting: send findings via email or Slack/Discord webhook
+- [x] Alerting: send findings via email
 - [x] CLI interface (`azure-guardian scan --nsg`, `azure-guardian scan --costs`)
 - [x] Scheduled scanning (cron / GitHub Actions on a timer)
 
