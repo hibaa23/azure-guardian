@@ -112,7 +112,7 @@ pytest tests/ -v
 ```
 
 Example output:
-
+```
 ================================================= test session starts =================================================
 platform win32 -- Python 3.14.6, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\hibab\OneDrive\Documents\azure-guardian\venv\Scripts\python.exe
 cachedir: .pytest_cache
